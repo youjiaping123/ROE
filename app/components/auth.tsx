@@ -2,14 +2,14 @@ import styles from "./auth.module.scss";
 import { IconButton } from "./button";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Path, SAAS_CHAT_URL } from "../constant";
+import { Path } from "../constant";
 import { useAccessStore } from "../store";
 import Locale from "../locales";
 import BotIcon from "../icons/bot.svg";
 import { getClientConfig } from "../config/client";
 import LeftIcon from "@/app/icons/left.svg";
 import { safeLocalStorage } from "@/app/utils";
-import { trackAuthorizationPageButtonToCPaymentClick } from "../utils/auth-settings-events";
+
 const storage = safeLocalStorage();
 
 export function AuthPage() {
@@ -17,17 +17,13 @@ export function AuthPage() {
   const accessStore = useAccessStore();
   const goHome = () => navigate(Path.Home);
   const goChat = () => navigate(Path.Chat);
-  const goSaas = () => {
-    trackAuthorizationPageButtonToCPaymentClick();
-    window.location.href = SAAS_CHAT_URL;
-  };
 
   const resetAccessCode = () => {
     accessStore.update((access) => {
       access.openaiApiKey = "";
       access.accessCode = "";
     });
-  }; // Reset access code to empty string
+  };
 
   useEffect(() => {
     if (getClientConfig()?.isApp) {
@@ -98,17 +94,11 @@ export function AuthPage() {
           type="primary"
           onClick={goChat}
         />
-        <IconButton
-          text={Locale.Auth.SaasTips}
-          onClick={() => {
-            goSaas();
-          }}
-        />
       </div>
     </div>
   );
 }
 
 function TopBanner() {
-  return null; // 这将使组件不渲染任何内容
+  return null;
 }
